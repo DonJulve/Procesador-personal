@@ -1,0 +1,647 @@
+
+g2.arm:     file format elf64-littleaarch64
+
+
+Disassembly of section .init:
+
+0000000000400608 <_init>:
+  400608:	a9bf7bfd 	stp	x29, x30, [sp, #-16]!
+  40060c:	910003fd 	mov	x29, sp
+  400610:	9400014e 	bl	400b48 <call_weak_fn>
+  400614:	a8c17bfd 	ldp	x29, x30, [sp], #16
+  400618:	d65f03c0 	ret
+
+Disassembly of section .plt:
+
+0000000000400620 <.plt>:
+  400620:	a9bf7bf0 	stp	x16, x30, [sp, #-16]!
+  400624:	b0000090 	adrp	x16, 411000 <__FRAME_END__+0xfe58>
+  400628:	f947fe11 	ldr	x17, [x16, #4088]
+  40062c:	913fe210 	add	x16, x16, #0xff8
+  400630:	d61f0220 	br	x17
+  400634:	d503201f 	nop
+  400638:	d503201f 	nop
+  40063c:	d503201f 	nop
+
+0000000000400640 <exit@plt>:
+  400640:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  400644:	f9400211 	ldr	x17, [x16]
+  400648:	91000210 	add	x16, x16, #0x0
+  40064c:	d61f0220 	br	x17
+
+0000000000400650 <__libc_start_main@plt>:
+  400650:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  400654:	f9400611 	ldr	x17, [x16, #8]
+  400658:	91002210 	add	x16, x16, #0x8
+  40065c:	d61f0220 	br	x17
+
+0000000000400660 <__gmon_start__@plt>:
+  400660:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  400664:	f9400a11 	ldr	x17, [x16, #16]
+  400668:	91004210 	add	x16, x16, #0x10
+  40066c:	d61f0220 	br	x17
+
+0000000000400670 <abort@plt>:
+  400670:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  400674:	f9400e11 	ldr	x17, [x16, #24]
+  400678:	91006210 	add	x16, x16, #0x18
+  40067c:	d61f0220 	br	x17
+
+0000000000400680 <puts@plt>:
+  400680:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  400684:	f9401211 	ldr	x17, [x16, #32]
+  400688:	91008210 	add	x16, x16, #0x20
+  40068c:	d61f0220 	br	x17
+
+0000000000400690 <strtol@plt>:
+  400690:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  400694:	f9401611 	ldr	x17, [x16, #40]
+  400698:	9100a210 	add	x16, x16, #0x28
+  40069c:	d61f0220 	br	x17
+
+00000000004006a0 <fwrite@plt>:
+  4006a0:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  4006a4:	f9401a11 	ldr	x17, [x16, #48]
+  4006a8:	9100c210 	add	x16, x16, #0x30
+  4006ac:	d61f0220 	br	x17
+
+00000000004006b0 <times@plt>:
+  4006b0:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  4006b4:	f9401e11 	ldr	x17, [x16, #56]
+  4006b8:	9100e210 	add	x16, x16, #0x38
+  4006bc:	d61f0220 	br	x17
+
+00000000004006c0 <sysconf@plt>:
+  4006c0:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  4006c4:	f9402211 	ldr	x17, [x16, #64]
+  4006c8:	91010210 	add	x16, x16, #0x40
+  4006cc:	d61f0220 	br	x17
+
+00000000004006d0 <printf@plt>:
+  4006d0:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  4006d4:	f9402611 	ldr	x17, [x16, #72]
+  4006d8:	91012210 	add	x16, x16, #0x48
+  4006dc:	d61f0220 	br	x17
+
+00000000004006e0 <fprintf@plt>:
+  4006e0:	d0000090 	adrp	x16, 412000 <exit@GLIBC_2.17>
+  4006e4:	f9402a11 	ldr	x17, [x16, #80]
+  4006e8:	91014210 	add	x16, x16, #0x50
+  4006ec:	d61f0220 	br	x17
+
+Disassembly of section .text:
+
+00000000004006f0 <main>:
+double P[MAXSIZE];
+double B[MAXSIZE];
+
+int
+main(int argc, char *argv[])
+{
+  4006f0:	a9b47bfd 	stp	x29, x30, [sp, #-192]!
+  4006f4:	910003fd 	mov	x29, sp
+  4006f8:	a90153f3 	stp	x19, x20, [sp, #16]
+  4006fc:	aa0103f4 	mov	x20, x1
+  clock_t tinicio, tfinal, ttotal = 0;
+  clock_t etime0, etime1;
+  float timer_resolution;
+  float loop_mean, loop_var, test_mean, loop_std_ratio_c; 
+
+  if (argc < 4) {
+  400700:	71000c1f 	cmp	w0, #0x3
+  400704:	540001ac 	b.gt	400738 <main+0x48>
+    printf("Uso:%s <tamaño-matriz> <numero-de-iteraciones> <numero-de-pruebas>\n", argv[0]);
+  400708:	f9400021 	ldr	x1, [x1]
+  40070c:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400710:	9132e000 	add	x0, x0, #0xcb8
+  400714:	a9025bf5 	stp	x21, x22, [sp, #32]
+  400718:	a90363f7 	stp	x23, x24, [sp, #48]
+  40071c:	a9046bf9 	stp	x25, x26, [sp, #64]
+  400720:	a90573fb 	stp	x27, x28, [sp, #80]
+  400724:	6d0627e8 	stp	d8, d9, [sp, #96]
+  400728:	6d072fea 	stp	d10, d11, [sp, #112]
+  40072c:	97ffffe9 	bl	4006d0 <printf@plt>
+    exit(-1);
+  400730:	12800000 	mov	w0, #0xffffffff            	// #-1
+  400734:	97ffffc3 	bl	400640 <exit@plt>
+
+#ifdef __USE_EXTERN_INLINES
+__extern_inline int
+__NTH (atoi (const char *__nptr))
+{
+  return (int) strtol (__nptr, (char **) NULL, 10);
+  400738:	f9400680 	ldr	x0, [x20, #8]
+  40073c:	52800142 	mov	w2, #0xa                   	// #10
+  400740:	d2800001 	mov	x1, #0x0                   	// #0
+  400744:	a90363f7 	stp	x23, x24, [sp, #48]
+  400748:	97ffffd2 	bl	400690 <strtol@plt>
+  40074c:	aa0003f8 	mov	x24, x0
+  400750:	2a0003f3 	mov	w19, w0
+  }
+
+  m_size = atoi(argv[1]);
+  if (m_size > MAXSIZE) {
+  400754:	52820103 	mov	w3, #0x1008                	// #4104
+  400758:	6b03001f 	cmp	w0, w3
+  40075c:	540001cd 	b.le	400794 <main+0xa4>
+      fprintf(stderr,"ERROR: el tamaño de la matriz (%d) debe ser menor que MAXSIZE (%d)\n", m_size, MAXSIZE);
+  400760:	d0000080 	adrp	x0, 412000 <exit@GLIBC_2.17>
+  400764:	2a1803e2 	mov	w2, w24
+  400768:	90000001 	adrp	x1, 400000 <_init-0x608>
+  40076c:	91340021 	add	x1, x1, #0xd00
+  400770:	f9403400 	ldr	x0, [x0, #104]
+  400774:	a9025bf5 	stp	x21, x22, [sp, #32]
+  400778:	a9046bf9 	stp	x25, x26, [sp, #64]
+  40077c:	a90573fb 	stp	x27, x28, [sp, #80]
+  400780:	6d0627e8 	stp	d8, d9, [sp, #96]
+  400784:	6d072fea 	stp	d10, d11, [sp, #112]
+  400788:	97ffffd6 	bl	4006e0 <fprintf@plt>
+      exit(1);
+  40078c:	52800020 	mov	w0, #0x1                   	// #1
+  400790:	97ffffac 	bl	400640 <exit@plt>
+  400794:	f9400a80 	ldr	x0, [x20, #16]
+  400798:	52800142 	mov	w2, #0xa                   	// #10
+  40079c:	d2800001 	mov	x1, #0x0                   	// #0
+  4007a0:	a9046bf9 	stp	x25, x26, [sp, #64]
+  4007a4:	a90573fb 	stp	x27, x28, [sp, #80]
+  4007a8:	97ffffba 	bl	400690 <strtol@plt>
+  4007ac:	aa0003fb 	mov	x27, x0
+  4007b0:	2a0003fa 	mov	w26, w0
+  4007b4:	52800142 	mov	w2, #0xa                   	// #10
+  4007b8:	f9400e80 	ldr	x0, [x20, #24]
+  4007bc:	d2800001 	mov	x1, #0x0                   	// #0
+  4007c0:	97ffffb4 	bl	400690 <strtol@plt>
+  4007c4:	a9025bf5 	stp	x21, x22, [sp, #32]
+  }
+   
+  limit = atoi(argv[2]);
+  repeat = atoi(argv[3]);
+  if ((limit < 1) || (repeat < 1)) {
+  4007c8:	7100037f 	cmp	w27, #0x0
+  4007cc:	b90097e0 	str	w0, [sp, #148]
+  4007d0:	aa0003f4 	mov	x20, x0
+  4007d4:	6d0627e8 	stp	d8, d9, [sp, #96]
+  4007d8:	7a40c804 	ccmp	w0, #0x0, #0x4, gt
+  4007dc:	6d072fea 	stp	d10, d11, [sp, #112]
+  4007e0:	54000ccd 	b.le	400978 <main+0x288>
+      fprintf(stderr,"ERROR: el número de iteraciones y el de pruebas debe ser mayor que 0\n");
+      exit(1);
+  }
+  
+  /* Inicializacion */
+  for (i = 0; i < m_size ;i++) {
+  4007e4:	d0000105 	adrp	x5, 422000 <P+0x7f48>
+  4007e8:	9103e0b6 	add	x22, x5, #0xf8
+  4007ec:	7100031f 	cmp	w24, #0x0
+  4007f0:	5400034d 	b.le	400858 <main+0x168>
+  4007f4:	d0000087 	adrp	x7, 412000 <exit@GLIBC_2.17>
+  4007f8:	d00000c4 	adrp	x4, 41a000 <B+0x7f88>
+  4007fc:	aa1603e1 	mov	x1, x22
+  400800:	9101e0e7 	add	x7, x7, #0x78
+  400804:	9102e084 	add	x4, x4, #0xb8
+  400808:	d2800002 	mov	x2, #0x0                   	// #0
+    B[i] = (double) i + 4.0;    
+  40080c:	1e621002 	fmov	d2, #4.000000000000000000e+00
+  for (i = 0; i < m_size ;i++) {
+  400810:	d2900808 	mov	x8, #0x8040                	// #32832
+    B[i] = (double) i + 4.0;    
+  400814:	1e620041 	scvtf	d1, w2
+    P[i] = (double) i * 2.0;    
+  400818:	d2800000 	mov	x0, #0x0                   	// #0
+    B[i] = (double) i + 4.0;    
+  40081c:	1e622823 	fadd	d3, d1, d2
+    P[i] = (double) i * 2.0;    
+  400820:	1e612820 	fadd	d0, d1, d1
+    B[i] = (double) i + 4.0;    
+  400824:	fc2278e3 	str	d3, [x7, x2, lsl #3]
+    P[i] = (double) i * 2.0;    
+  400828:	fc227880 	str	d0, [x4, x2, lsl #3]
+    for (j = 0; j < m_size ; j++) {
+  40082c:	d503201f 	nop
+      A[i][j] = (double) i + (double) j;
+  400830:	1e620000 	scvtf	d0, w0
+  400834:	1e612800 	fadd	d0, d0, d1
+  400838:	fc207820 	str	d0, [x1, x0, lsl #3]
+    for (j = 0; j < m_size ; j++) {
+  40083c:	91000400 	add	x0, x0, #0x1
+  400840:	6b00027f 	cmp	w19, w0
+  400844:	54ffff6c 	b.gt	400830 <main+0x140>
+  for (i = 0; i < m_size ;i++) {
+  400848:	91000442 	add	x2, x2, #0x1
+  40084c:	8b080021 	add	x1, x1, x8
+  400850:	6b02027f 	cmp	w19, w2
+  400854:	54fffe0c 	b.gt	400814 <main+0x124>
+   * (tiempo en milisegundos entre dos ticks del temporizador) 
+   * Se calcula a partir del nº de intervalos que el temporizador cuenta cada segundo.
+   * Para saber este nº de intervalos hay que usar la llamada sysconf(_SC_CLK_TCK).
+   * El programa realiza esta llamada e inicializa la variable timer_resolution.
+   */
+  intervalos = sysconf(_SC_CLK_TCK);
+  400858:	52800040 	mov	w0, #0x2                   	// #2
+  40085c:	97ffff99 	bl	4006c0 <sysconf@plt>
+  400860:	aa0003f9 	mov	x25, x0
+  timer_resolution = 1000000.0/intervalos;
+  400864:	d2d09002 	mov	x2, #0x848000000000        	// #145685290680320
+  400868:	f2e825c2 	movk	x2, #0x412e, lsl #48
+  40086c:	9e670048 	fmov	d8, x2
+  400870:	1e620320 	scvtf	d0, w25
+  
+  printf ("\n******** Datos ********\n");
+  400874:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400878:	91352000 	add	x0, x0, #0xd48
+  clock_t total = 0, total_sqrd = 0;
+  40087c:	f90043ff 	str	xzr, [sp, #128]
+  400880:	d00000dc 	adrp	x28, 41a000 <B+0x7f88>
+  400884:	9102e39c 	add	x28, x28, #0xb8
+  400888:	d2800017 	mov	x23, #0x0                   	// #0
+   /* Inicio del cálculo del tiempo de ejecución de todos los bucles */ 
+  times(&time_info);	/* man -s2 times */
+  tinicio = time_info.tms_utime;
+
+  /* Ejecuta el experimento "repeat" veces */
+  for (r = 0; r < repeat; r++)
+  40088c:	52800015 	mov	w21, #0x0                   	// #0
+  timer_resolution = 1000000.0/intervalos;
+  400890:	1e601908 	fdiv	d8, d8, d0
+  400894:	1e624108 	fcvt	s8, d8
+  printf ("\n******** Datos ********\n");
+  400898:	97ffff7a 	bl	400680 <puts@plt>
+  printf("Resolucion del temporizador: %7.1f usg (%d intervalos/seg)\n", timer_resolution, intervalos);
+  40089c:	1e22c10a 	fcvt	d10, s8
+  4008a0:	2a1903e1 	mov	w1, w25
+  4008a4:	90000000 	adrp	x0, 400000 <_init-0x608>
+  4008a8:	9135a000 	add	x0, x0, #0xd68
+  4008ac:	1e604140 	fmov	d0, d10
+  4008b0:	97ffff88 	bl	4006d0 <printf@plt>
+  printf("Tamaño_matriz, limit, repeat:  %dx%d, %d, %d\n", m_size, m_size, limit, repeat);
+  4008b4:	2a1b03e3 	mov	w3, w27
+  4008b8:	2a1803e2 	mov	w2, w24
+  4008bc:	2a1803e1 	mov	w1, w24
+  4008c0:	2a1403e4 	mov	w4, w20
+  4008c4:	90000000 	adrp	x0, 400000 <_init-0x608>
+  4008c8:	9136a000 	add	x0, x0, #0xda8
+  4008cc:	97ffff81 	bl	4006d0 <printf@plt>
+  printf("Ejecutando gauss v1.3.\n\n");
+  4008d0:	90000018 	adrp	x24, 400000 <_init-0x608>
+  4008d4:	90000000 	adrp	x0, 400000 <_init-0x608>
+  4008d8:	91376000 	add	x0, x0, #0xdd8
+  4008dc:	97ffff69 	bl	400680 <puts@plt>
+  times(&time_info);	/* man -s2 times */
+  4008e0:	d000009b 	adrp	x27, 412000 <exit@GLIBC_2.17>
+  4008e4:	910283e0 	add	x0, sp, #0xa0
+  4008e8:	97ffff72 	bl	4006b0 <times@plt>
+  tinicio = time_info.tms_utime;
+  4008ec:	1e220349 	scvtf	s9, w26
+  4008f0:	9138e318 	add	x24, x24, #0xe38
+  4008f4:	9101e37b 	add	x27, x27, #0x78
+  4008f8:	f94053e0 	ldr	x0, [sp, #160]
+  4008fc:	f90047e0 	str	x0, [sp, #136]
+  {
+    /* Ponemos en marcha el cronometro */
+    etime0 = times(&time_info);
+  400900:	910283e0 	add	x0, sp, #0xa0
+  400904:	97ffff6b 	bl	4006b0 <times@plt>
+    user0 = time_info.tms_utime;
+
+    for (s = 0; s < limit; s++)
+    {
+      /* Impide optimizaciones agresivas del compilador */
+      A[0][0] = 0.0;
+  400908:	2f00e403 	movi	d3, #0x0
+    etime0 = times(&time_info);
+  40090c:	aa0003e7 	mov	x7, x0
+    user0 = time_info.tms_utime;
+  400910:	f94053f9 	ldr	x25, [sp, #160]
+    for (s = 0; s < limit; s++)
+  400914:	52800004 	mov	w4, #0x0                   	// #0
+
+      /* Estos dos bucles anidados son que queremos medir: L/U  */
+      for (i = 0; i < m_size; i++)
+  400918:	d2900803 	mov	x3, #0x8040                	// #32832
+  40091c:	d503201f 	nop
+      A[0][0] = 0.0;
+  400920:	fd0002c3 	str	d3, [x22]
+      for (i = 0; i < m_size; i++)
+  400924:	7100027f 	cmp	w19, #0x0
+  400928:	540003ad 	b.le	40099c <main+0x2ac>
+  40092c:	2f00e400 	movi	d0, #0x0
+  400930:	aa1603e1 	mov	x1, x22
+  400934:	d2800002 	mov	x2, #0x0                   	// #0
+      {
+	for (j = 0; j < m_size; j++)
+	   A[i][j] = A[i][j] - P[i]*B[j];
+  400938:	d2800000 	mov	x0, #0x0                   	// #0
+  40093c:	fc627b82 	ldr	d2, [x28, x2, lsl #3]
+  400940:	14000002 	b	400948 <main+0x258>
+  400944:	fc607820 	ldr	d0, [x1, x0, lsl #3]
+  400948:	fc607b61 	ldr	d1, [x27, x0, lsl #3]
+  40094c:	1f418040 	fmsub	d0, d2, d1, d0
+  400950:	fc207820 	str	d0, [x1, x0, lsl #3]
+	for (j = 0; j < m_size; j++)
+  400954:	91000400 	add	x0, x0, #0x1
+  400958:	6b00027f 	cmp	w19, w0
+  40095c:	54ffff4c 	b.gt	400944 <main+0x254>
+      for (i = 0; i < m_size; i++)
+  400960:	91000442 	add	x2, x2, #0x1
+  400964:	8b030021 	add	x1, x1, x3
+  400968:	6b02027f 	cmp	w19, w2
+  40096c:	5400018d 	b.le	40099c <main+0x2ac>
+	   A[i][j] = A[i][j] - P[i]*B[j];
+  400970:	fd400020 	ldr	d0, [x1]
+  400974:	17fffff1 	b	400938 <main+0x248>
+      fprintf(stderr,"ERROR: el número de iteraciones y el de pruebas debe ser mayor que 0\n");
+  400978:	d0000083 	adrp	x3, 412000 <exit@GLIBC_2.17>
+  40097c:	d28008a2 	mov	x2, #0x45                  	// #69
+  400980:	d2800021 	mov	x1, #0x1                   	// #1
+  400984:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400988:	f9403463 	ldr	x3, [x3, #104]
+  40098c:	9137c000 	add	x0, x0, #0xdf0
+  400990:	97ffff44 	bl	4006a0 <fwrite@plt>
+      exit(1);
+  400994:	52800020 	mov	w0, #0x1                   	// #1
+  400998:	97ffff2a 	bl	400640 <exit@plt>
+    for (s = 0; s < limit; s++)
+  40099c:	11000484 	add	w4, w4, #0x1
+  4009a0:	6b1a009f 	cmp	w4, w26
+  4009a4:	54fffbeb 	b.lt	400920 <main+0x230>  // b.tstop
+    } /* Fin s */
+
+    //sleep(1);
+
+    /* Paramos el cronometro */
+    etime1 = times(&time_info);
+  4009a8:	910283e0 	add	x0, sp, #0xa0
+  4009ac:	f9004fe7 	str	x7, [sp, #152]
+  4009b0:	97ffff40 	bl	4006b0 <times@plt>
+    user1 = time_info.tms_utime;
+
+    sample_cpu = user1 - user0;
+    sample_elapsed = etime1 - etime0;
+
+    printf("*** Test %02d = %8.3f usg (%8.3f)\n", r+1,
+  4009b4:	110006b5 	add	w21, w21, #0x1
+    sample_cpu = user1 - user0;
+  4009b8:	a9498be7 	ldp	x7, x2, [sp, #152]
+    printf("*** Test %02d = %8.3f usg (%8.3f)\n", r+1,
+  4009bc:	2a1503e1 	mov	w1, w21
+    sample_elapsed = etime1 - etime0;
+  4009c0:	cb070003 	sub	x3, x0, x7
+    sample_cpu = user1 - user0;
+  4009c4:	cb190059 	sub	x25, x2, x25
+    printf("*** Test %02d = %8.3f usg (%8.3f)\n", r+1,
+  4009c8:	aa1803e0 	mov	x0, x24
+			sample_cpu*timer_resolution/limit,
+			sample_elapsed*timer_resolution/limit);
+  4009cc:	9e220061 	scvtf	s1, x3
+			sample_cpu*timer_resolution/limit,
+  4009d0:	9e22032b 	scvtf	s11, x25
+			sample_elapsed*timer_resolution/limit);
+  4009d4:	1e280821 	fmul	s1, s1, s8
+			sample_cpu*timer_resolution/limit,
+  4009d8:	1e28096b 	fmul	s11, s11, s8
+			sample_elapsed*timer_resolution/limit);
+  4009dc:	1e291821 	fdiv	s1, s1, s9
+			sample_cpu*timer_resolution/limit,
+  4009e0:	1e291960 	fdiv	s0, s11, s9
+    printf("*** Test %02d = %8.3f usg (%8.3f)\n", r+1,
+  4009e4:	1e22c021 	fcvt	d1, s1
+  4009e8:	1e22c000 	fcvt	d0, s0
+  4009ec:	97ffff39 	bl	4006d0 <printf@plt>
+
+    if (sample_cpu == 0)
+  4009f0:	b4000679 	cbz	x25, 400abc <main+0x3cc>
+      printf("AVISO: tiempo de ejecución menor que la resolución del reloj\n");
+    else if (sample_cpu < 20)
+  4009f4:	f1004f3f 	cmp	x25, #0x13
+  4009f8:	540006ad 	b.le	400acc <main+0x3dc>
+    	printf("AVISO: tiempo de ejecución (%4.2f usg) menor que 20 ticks del reloj (%4.2f usg)\n", sample_cpu*timer_resolution, 20.0*timer_resolution);
+    	
+    total += sample_cpu;
+    total_sqrd += (sample_cpu * sample_cpu);
+  4009fc:	f94043e0 	ldr	x0, [sp, #128]
+    total += sample_cpu;
+  400a00:	8b1902f7 	add	x23, x23, x25
+    total_sqrd += (sample_cpu * sample_cpu);
+  400a04:	9b190320 	madd	x0, x25, x25, x0
+  400a08:	f90043e0 	str	x0, [sp, #128]
+  for (r = 0; r < repeat; r++)
+  400a0c:	b94097e0 	ldr	w0, [sp, #148]
+  400a10:	6b0002bf 	cmp	w21, w0
+  400a14:	54fff76b 	b.lt	400900 <main+0x210>  // b.tstop
+  } /* fin repeat */
+
+  /* Cálculo del tiempo de ejecución de todos los bucles */
+  times(&time_info);
+  400a18:	910283e0 	add	x0, sp, #0xa0
+  400a1c:	97ffff25 	bl	4006b0 <times@plt>
+  
+  /* Cálculo de la varianza y desviación estándar
+   * de las medidas obtenidas por el bucle repeat */
+  /* VAR[X] = E[X^2] - E[X]^2 */
+  /* STD[X] = sqrt(VAR[X]) */
+  loop_mean = (float) total / repeat;
+  400a20:	1e220281 	scvtf	s1, w20
+  400a24:	9e2202ea 	scvtf	s10, x23
+  loop_var = ((float) total_sqrd / repeat) - (loop_mean * loop_mean);
+  400a28:	f94043e0 	ldr	x0, [sp, #128]
+  ttotal = tfinal - tinicio;
+  400a2c:	f94053f3 	ldr	x19, [sp, #160]
+  loop_var = ((float) total_sqrd / repeat) - (loop_mean * loop_mean);
+  400a30:	9e220000 	scvtf	s0, x0
+  loop_mean = (float) total / repeat;
+  400a34:	1e21194a 	fdiv	s10, s10, s1
+  loop_std_ratio_c = loop_var / (loop_mean*loop_mean);
+  if (loop_std_ratio_c > 0.0025)
+  400a38:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400a3c:	fd47fc02 	ldr	d2, [x0, #4088]
+  loop_var = ((float) total_sqrd / repeat) - (loop_mean * loop_mean);
+  400a40:	1e211800 	fdiv	s0, s0, s1
+  ttotal = tfinal - tinicio;
+  400a44:	f94047e0 	ldr	x0, [sp, #136]
+  400a48:	cb000273 	sub	x19, x19, x0
+  loop_var = ((float) total_sqrd / repeat) - (loop_mean * loop_mean);
+  400a4c:	1e2a0941 	fmul	s1, s10, s10
+  400a50:	1e213800 	fsub	s0, s0, s1
+  loop_std_ratio_c = loop_var / (loop_mean*loop_mean);
+  400a54:	1e211800 	fdiv	s0, s0, s1
+  if (loop_std_ratio_c > 0.0025)
+  400a58:	1e22c000 	fcvt	d0, s0
+  400a5c:	1e622010 	fcmpe	d0, d2
+  400a60:	5400044c 	b.gt	400ae8 <main+0x3f8>
+	printf("AVISO: Varianza de las mediciones demasiado alta\n");
+
+  test_mean = loop_mean / limit;
+  printf("\n******** Resultados ********\n");
+  400a64:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400a68:	913cc000 	add	x0, x0, #0xf30
+  400a6c:	97ffff05 	bl	400680 <puts@plt>
+  test_mean = loop_mean / limit;
+  400a70:	1e291940 	fdiv	s0, s10, s9
+  printf("Tiempo medio de ejecución de L/U    = %8.3f usg\n", test_mean*timer_resolution);
+  400a74:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400a78:	913d4000 	add	x0, x0, #0xf50
+  400a7c:	1e280800 	fmul	s0, s0, s8
+  400a80:	1e22c000 	fcvt	d0, s0
+  400a84:	97ffff13 	bl	4006d0 <printf@plt>
+  printf("Tiempo medio de ejecución de limit  = %8.0f usg\n", loop_mean*timer_resolution);
+  400a88:	1e2a0900 	fmul	s0, s8, s10
+  400a8c:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400a90:	913e2000 	add	x0, x0, #0xf88
+  400a94:	1e22c000 	fcvt	d0, s0
+  400a98:	97ffff0e 	bl	4006d0 <printf@plt>
+  printf("Tiempo total de ejecución de repeat = %8.0f usg\n\n", ttotal*timer_resolution);
+  400a9c:	9e220260 	scvtf	s0, x19
+  400aa0:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400aa4:	913f0000 	add	x0, x0, #0xfc0
+  400aa8:	1e280800 	fmul	s0, s0, s8
+  400aac:	1e22c000 	fcvt	d0, s0
+  400ab0:	97ffff08 	bl	4006d0 <printf@plt>
+  
+  exit(0);
+  400ab4:	52800000 	mov	w0, #0x0                   	// #0
+  400ab8:	97fffee2 	bl	400640 <exit@plt>
+      printf("AVISO: tiempo de ejecución menor que la resolución del reloj\n");
+  400abc:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400ac0:	91398000 	add	x0, x0, #0xe60
+  400ac4:	97fffeef 	bl	400680 <puts@plt>
+  400ac8:	17ffffcd 	b	4009fc <main+0x30c>
+    	printf("AVISO: tiempo de ejecución (%4.2f usg) menor que 20 ticks del reloj (%4.2f usg)\n", sample_cpu*timer_resolution, 20.0*timer_resolution);
+  400acc:	1e669001 	fmov	d1, #2.000000000000000000e+01
+  400ad0:	1e22c160 	fcvt	d0, s11
+  400ad4:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400ad8:	913a8000 	add	x0, x0, #0xea0
+  400adc:	1e610941 	fmul	d1, d10, d1
+  400ae0:	97fffefc 	bl	4006d0 <printf@plt>
+  400ae4:	17ffffc6 	b	4009fc <main+0x30c>
+	printf("AVISO: Varianza de las mediciones demasiado alta\n");
+  400ae8:	90000000 	adrp	x0, 400000 <_init-0x608>
+  400aec:	913be000 	add	x0, x0, #0xef8
+  400af0:	97fffee4 	bl	400680 <puts@plt>
+  400af4:	17ffffdc 	b	400a64 <main+0x374>
+
+0000000000400af8 <_start>:
+  400af8:	d280001d 	mov	x29, #0x0                   	// #0
+  400afc:	d280001e 	mov	x30, #0x0                   	// #0
+  400b00:	aa0003e5 	mov	x5, x0
+  400b04:	f94003e1 	ldr	x1, [sp]
+  400b08:	910023e2 	add	x2, sp, #0x8
+  400b0c:	910003e6 	mov	x6, sp
+  400b10:	d2e00000 	movz	x0, #0x0, lsl #48
+  400b14:	f2c00000 	movk	x0, #0x0, lsl #32
+  400b18:	f2a00800 	movk	x0, #0x40, lsl #16
+  400b1c:	f280de00 	movk	x0, #0x6f0
+  400b20:	d2e00003 	movz	x3, #0x0, lsl #48
+  400b24:	f2c00003 	movk	x3, #0x0, lsl #32
+  400b28:	f2a00803 	movk	x3, #0x40, lsl #16
+  400b2c:	f2818103 	movk	x3, #0xc08
+  400b30:	d2e00004 	movz	x4, #0x0, lsl #48
+  400b34:	f2c00004 	movk	x4, #0x0, lsl #32
+  400b38:	f2a00804 	movk	x4, #0x40, lsl #16
+  400b3c:	f2819104 	movk	x4, #0xc88
+  400b40:	97fffec4 	bl	400650 <__libc_start_main@plt>
+  400b44:	97fffecb 	bl	400670 <abort@plt>
+
+0000000000400b48 <call_weak_fn>:
+  400b48:	b0000080 	adrp	x0, 411000 <__FRAME_END__+0xfe58>
+  400b4c:	f947f000 	ldr	x0, [x0, #4064]
+  400b50:	b4000040 	cbz	x0, 400b58 <call_weak_fn+0x10>
+  400b54:	17fffec3 	b	400660 <__gmon_start__@plt>
+  400b58:	d65f03c0 	ret
+  400b5c:	d503201f 	nop
+
+0000000000400b60 <deregister_tm_clones>:
+  400b60:	d0000080 	adrp	x0, 412000 <exit@GLIBC_2.17>
+  400b64:	9101a000 	add	x0, x0, #0x68
+  400b68:	d0000081 	adrp	x1, 412000 <exit@GLIBC_2.17>
+  400b6c:	9101a021 	add	x1, x1, #0x68
+  400b70:	eb00003f 	cmp	x1, x0
+  400b74:	540000c0 	b.eq	400b8c <deregister_tm_clones+0x2c>  // b.none
+  400b78:	90000001 	adrp	x1, 400000 <_init-0x608>
+  400b7c:	f9465421 	ldr	x1, [x1, #3240]
+  400b80:	b4000061 	cbz	x1, 400b8c <deregister_tm_clones+0x2c>
+  400b84:	aa0103f0 	mov	x16, x1
+  400b88:	d61f0200 	br	x16
+  400b8c:	d65f03c0 	ret
+
+0000000000400b90 <register_tm_clones>:
+  400b90:	d0000080 	adrp	x0, 412000 <exit@GLIBC_2.17>
+  400b94:	9101a000 	add	x0, x0, #0x68
+  400b98:	d0000081 	adrp	x1, 412000 <exit@GLIBC_2.17>
+  400b9c:	9101a021 	add	x1, x1, #0x68
+  400ba0:	cb000021 	sub	x1, x1, x0
+  400ba4:	d37ffc22 	lsr	x2, x1, #63
+  400ba8:	8b810c41 	add	x1, x2, x1, asr #3
+  400bac:	9341fc21 	asr	x1, x1, #1
+  400bb0:	b40000c1 	cbz	x1, 400bc8 <register_tm_clones+0x38>
+  400bb4:	90000002 	adrp	x2, 400000 <_init-0x608>
+  400bb8:	f9465842 	ldr	x2, [x2, #3248]
+  400bbc:	b4000062 	cbz	x2, 400bc8 <register_tm_clones+0x38>
+  400bc0:	aa0203f0 	mov	x16, x2
+  400bc4:	d61f0200 	br	x16
+  400bc8:	d65f03c0 	ret
+  400bcc:	d503201f 	nop
+
+0000000000400bd0 <__do_global_dtors_aux>:
+  400bd0:	a9be7bfd 	stp	x29, x30, [sp, #-32]!
+  400bd4:	910003fd 	mov	x29, sp
+  400bd8:	f9000bf3 	str	x19, [sp, #16]
+  400bdc:	d0000093 	adrp	x19, 412000 <exit@GLIBC_2.17>
+  400be0:	3941c260 	ldrb	w0, [x19, #112]
+  400be4:	35000080 	cbnz	w0, 400bf4 <__do_global_dtors_aux+0x24>
+  400be8:	97ffffde 	bl	400b60 <deregister_tm_clones>
+  400bec:	52800020 	mov	w0, #0x1                   	// #1
+  400bf0:	3901c260 	strb	w0, [x19, #112]
+  400bf4:	f9400bf3 	ldr	x19, [sp, #16]
+  400bf8:	a8c27bfd 	ldp	x29, x30, [sp], #32
+  400bfc:	d65f03c0 	ret
+
+0000000000400c00 <frame_dummy>:
+  400c00:	17ffffe4 	b	400b90 <register_tm_clones>
+  400c04:	d503201f 	nop
+
+0000000000400c08 <__libc_csu_init>:
+  400c08:	a9bc7bfd 	stp	x29, x30, [sp, #-64]!
+  400c0c:	910003fd 	mov	x29, sp
+  400c10:	a90153f3 	stp	x19, x20, [sp, #16]
+  400c14:	b0000094 	adrp	x20, 411000 <__FRAME_END__+0xfe58>
+  400c18:	9137c294 	add	x20, x20, #0xdf0
+  400c1c:	a9025bf5 	stp	x21, x22, [sp, #32]
+  400c20:	b0000095 	adrp	x21, 411000 <__FRAME_END__+0xfe58>
+  400c24:	9137a2b5 	add	x21, x21, #0xde8
+  400c28:	cb150294 	sub	x20, x20, x21
+  400c2c:	2a0003f6 	mov	w22, w0
+  400c30:	a90363f7 	stp	x23, x24, [sp, #48]
+  400c34:	aa0103f7 	mov	x23, x1
+  400c38:	aa0203f8 	mov	x24, x2
+  400c3c:	9343fe94 	asr	x20, x20, #3
+  400c40:	97fffe72 	bl	400608 <_init>
+  400c44:	b4000174 	cbz	x20, 400c70 <__libc_csu_init+0x68>
+  400c48:	d2800013 	mov	x19, #0x0                   	// #0
+  400c4c:	d503201f 	nop
+  400c50:	f8737aa3 	ldr	x3, [x21, x19, lsl #3]
+  400c54:	aa1803e2 	mov	x2, x24
+  400c58:	91000673 	add	x19, x19, #0x1
+  400c5c:	aa1703e1 	mov	x1, x23
+  400c60:	2a1603e0 	mov	w0, w22
+  400c64:	d63f0060 	blr	x3
+  400c68:	eb13029f 	cmp	x20, x19
+  400c6c:	54ffff21 	b.ne	400c50 <__libc_csu_init+0x48>  // b.any
+  400c70:	a94153f3 	ldp	x19, x20, [sp, #16]
+  400c74:	a9425bf5 	ldp	x21, x22, [sp, #32]
+  400c78:	a94363f7 	ldp	x23, x24, [sp, #48]
+  400c7c:	a8c47bfd 	ldp	x29, x30, [sp], #64
+  400c80:	d65f03c0 	ret
+
+0000000000400c84 <.annobin___libc_csu_fini.start>:
+  400c84:	d503201f 	nop
+
+0000000000400c88 <__libc_csu_fini>:
+  400c88:	d65f03c0 	ret
+
+Disassembly of section .fini:
+
+0000000000400c8c <_fini>:
+  400c8c:	a9bf7bfd 	stp	x29, x30, [sp, #-16]!
+  400c90:	910003fd 	mov	x29, sp
+  400c94:	a8c17bfd 	ldp	x29, x30, [sp], #16
+  400c98:	d65f03c0 	ret

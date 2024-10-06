@@ -1,0 +1,468 @@
+	.arch armv8-a
+	.file	"gauss.c"
+	.text
+	.global	A
+	.bss
+	.align	3
+	.type	A, %object
+	.size	A, 134742528
+A:
+	.zero	134742528
+	.global	P
+	.align	3
+	.type	P, %object
+	.size	P, 32832
+P:
+	.zero	32832
+	.global	B
+	.align	3
+	.type	B, %object
+	.size	B, 32832
+B:
+	.zero	32832
+	.section	.rodata
+	.align	3
+.LC0:
+	.string	"Uso:%s <tama\361o-matriz> <numero-de-iteraciones> <numero-de-pruebas>\n"
+	.align	3
+.LC1:
+	.string	"ERROR: el tama\361o de la matriz (%d) debe ser menor que MAXSIZE (%d)\n"
+	.align	3
+.LC2:
+	.string	"ERROR: el n\372mero de iteraciones y el de pruebas debe ser mayor que 0\n"
+	.align	3
+.LC3:
+	.string	"\n******** Datos ********"
+	.align	3
+.LC4:
+	.string	"Resolucion del temporizador: %7.1f usg (%d intervalos/seg)\n"
+	.align	3
+.LC5:
+	.string	"Tama\361o_matriz, limit, repeat:  %dx%d, %d, %d\n"
+	.align	3
+.LC6:
+	.string	"Ejecutando gauss v1.3.\n"
+	.align	3
+.LC7:
+	.string	"*** Test %02d = %8.3f usg (%8.3f)\n"
+	.align	3
+.LC8:
+	.string	"AVISO: tiempo de ejecuci\363n menor que la resoluci\363n del reloj"
+	.align	3
+.LC9:
+	.string	"AVISO: tiempo de ejecuci\363n (%4.2f usg) menor que 20 ticks del reloj (%4.2f usg)\n"
+	.align	3
+.LC10:
+	.string	"AVISO: Varianza de las mediciones demasiado alta"
+	.align	3
+.LC11:
+	.string	"\n******** Resultados ********"
+	.align	3
+.LC12:
+	.string	"Tiempo medio de ejecuci\363n de L/U    = %8.3f usg\n"
+	.align	3
+.LC13:
+	.string	"Tiempo medio de ejecuci\363n de limit  = %8.0f usg\n"
+	.align	3
+.LC14:
+	.string	"Tiempo total de ejecuci\363n de repeat = %8.0f usg\n\n"
+	.text
+	.align	2
+	.global	main
+	.type	main, %function
+main:
+.LFB6:
+	.cfi_startproc
+	stp	x29, x30, [sp, -208]!
+	.cfi_def_cfa_offset 208
+	.cfi_offset 29, -208
+	.cfi_offset 30, -200
+	mov	x29, sp
+	str	w0, [sp, 28]
+	str	x1, [sp, 16]
+	str	xzr, [sp, 184]
+	str	xzr, [sp, 176]
+	str	xzr, [sp, 168]
+	ldr	w0, [sp, 28]
+	cmp	w0, 3
+	bgt	.L2
+	ldr	x0, [sp, 16]
+	ldr	x0, [x0]
+	mov	x1, x0
+	adrp	x0, .LC0
+	add	x0, x0, :lo12:.LC0
+	bl	printf
+	mov	w0, -1
+	bl	exit
+.L2:
+	ldr	x0, [sp, 16]
+	add	x0, x0, 8
+	ldr	x0, [x0]
+	bl	atoi
+	str	w0, [sp, 164]
+	ldr	w1, [sp, 164]
+	mov	w0, 4104
+	cmp	w1, w0
+	ble	.L3
+	adrp	x0, stderr
+	add	x0, x0, :lo12:stderr
+	ldr	x4, [x0]
+	mov	w3, 4104
+	ldr	w2, [sp, 164]
+	adrp	x0, .LC1
+	add	x1, x0, :lo12:.LC1
+	mov	x0, x4
+	bl	fprintf
+	mov	w0, 1
+	bl	exit
+.L3:
+	ldr	x0, [sp, 16]
+	add	x0, x0, 16
+	ldr	x0, [x0]
+	bl	atoi
+	str	w0, [sp, 160]
+	ldr	x0, [sp, 16]
+	add	x0, x0, 24
+	ldr	x0, [x0]
+	bl	atoi
+	str	w0, [sp, 156]
+	ldr	w0, [sp, 160]
+	cmp	w0, 0
+	ble	.L4
+	ldr	w0, [sp, 156]
+	cmp	w0, 0
+	bgt	.L5
+.L4:
+	adrp	x0, stderr
+	add	x0, x0, :lo12:stderr
+	ldr	x0, [x0]
+	mov	x3, x0
+	mov	x2, 69
+	mov	x1, 1
+	adrp	x0, .LC2
+	add	x0, x0, :lo12:.LC2
+	bl	fwrite
+	mov	w0, 1
+	bl	exit
+.L5:
+	str	wzr, [sp, 196]
+	b	.L6
+.L9:
+	ldr	w0, [sp, 196]
+	scvtf	d1, w0
+	fmov	d0, 4.0e+0
+	fadd	d0, d1, d0
+	adrp	x0, B
+	add	x0, x0, :lo12:B
+	ldrsw	x1, [sp, 196]
+	str	d0, [x0, x1, lsl 3]
+	ldr	w0, [sp, 196]
+	scvtf	d0, w0
+	fadd	d0, d0, d0
+	adrp	x0, P
+	add	x0, x0, :lo12:P
+	ldrsw	x1, [sp, 196]
+	str	d0, [x0, x1, lsl 3]
+	str	wzr, [sp, 192]
+	b	.L7
+.L8:
+	ldr	w0, [sp, 196]
+	scvtf	d1, w0
+	ldr	w0, [sp, 192]
+	scvtf	d0, w0
+	fadd	d0, d1, d0
+	adrp	x0, A
+	add	x2, x0, :lo12:A
+	ldrsw	x3, [sp, 192]
+	ldrsw	x1, [sp, 196]
+	mov	x0, x1
+	lsl	x0, x0, 9
+	add	x0, x0, x1
+	lsl	x0, x0, 3
+	add	x0, x0, x3
+	str	d0, [x2, x0, lsl 3]
+	ldr	w0, [sp, 192]
+	add	w0, w0, 1
+	str	w0, [sp, 192]
+.L7:
+	ldr	w1, [sp, 192]
+	ldr	w0, [sp, 164]
+	cmp	w1, w0
+	blt	.L8
+	ldr	w0, [sp, 196]
+	add	w0, w0, 1
+	str	w0, [sp, 196]
+.L6:
+	ldr	w1, [sp, 196]
+	ldr	w0, [sp, 164]
+	cmp	w1, w0
+	blt	.L9
+	mov	w0, 2
+	bl	sysconf
+	str	w0, [sp, 152]
+	ldr	w0, [sp, 152]
+	scvtf	d0, w0
+	mov	x0, 145685290680320
+	movk	x0, 0x412e, lsl 48
+	fmov	d1, x0
+	fdiv	d0, d1, d0
+	fcvt	s0, d0
+	str	s0, [sp, 148]
+	adrp	x0, .LC3
+	add	x0, x0, :lo12:.LC3
+	bl	puts
+	ldr	s0, [sp, 148]
+	fcvt	d0, s0
+	ldr	w1, [sp, 152]
+	adrp	x0, .LC4
+	add	x0, x0, :lo12:.LC4
+	bl	printf
+	ldr	w4, [sp, 156]
+	ldr	w3, [sp, 160]
+	ldr	w2, [sp, 164]
+	ldr	w1, [sp, 164]
+	adrp	x0, .LC5
+	add	x0, x0, :lo12:.LC5
+	bl	printf
+	adrp	x0, .LC6
+	add	x0, x0, :lo12:.LC6
+	bl	puts
+	add	x0, sp, 32
+	bl	times
+	ldr	x0, [sp, 32]
+	str	x0, [sp, 136]
+	str	wzr, [sp, 204]
+	b	.L10
+.L19:
+	add	x0, sp, 32
+	bl	times
+	str	x0, [sp, 104]
+	ldr	x0, [sp, 32]
+	str	x0, [sp, 96]
+	str	wzr, [sp, 200]
+	b	.L11
+.L16:
+	adrp	x0, A
+	add	x0, x0, :lo12:A
+	str	xzr, [x0]
+	str	wzr, [sp, 196]
+	b	.L12
+.L15:
+	str	wzr, [sp, 192]
+	b	.L13
+.L14:
+	adrp	x0, A
+	add	x2, x0, :lo12:A
+	ldrsw	x3, [sp, 192]
+	ldrsw	x1, [sp, 196]
+	mov	x0, x1
+	lsl	x0, x0, 9
+	add	x0, x0, x1
+	lsl	x0, x0, 3
+	add	x0, x0, x3
+	ldr	d1, [x2, x0, lsl 3]
+	adrp	x0, P
+	add	x0, x0, :lo12:P
+	ldrsw	x1, [sp, 196]
+	ldr	d2, [x0, x1, lsl 3]
+	adrp	x0, B
+	add	x0, x0, :lo12:B
+	ldrsw	x1, [sp, 192]
+	ldr	d0, [x0, x1, lsl 3]
+	fmul	d0, d2, d0
+	fsub	d0, d1, d0
+	adrp	x0, A
+	add	x2, x0, :lo12:A
+	ldrsw	x3, [sp, 192]
+	ldrsw	x1, [sp, 196]
+	mov	x0, x1
+	lsl	x0, x0, 9
+	add	x0, x0, x1
+	lsl	x0, x0, 3
+	add	x0, x0, x3
+	str	d0, [x2, x0, lsl 3]
+	ldr	w0, [sp, 192]
+	add	w0, w0, 1
+	str	w0, [sp, 192]
+.L13:
+	ldr	w1, [sp, 192]
+	ldr	w0, [sp, 164]
+	cmp	w1, w0
+	blt	.L14
+	ldr	w0, [sp, 196]
+	add	w0, w0, 1
+	str	w0, [sp, 196]
+.L12:
+	ldr	w1, [sp, 196]
+	ldr	w0, [sp, 164]
+	cmp	w1, w0
+	blt	.L15
+	ldr	w0, [sp, 200]
+	add	w0, w0, 1
+	str	w0, [sp, 200]
+.L11:
+	ldr	w1, [sp, 200]
+	ldr	w0, [sp, 160]
+	cmp	w1, w0
+	blt	.L16
+	add	x0, sp, 32
+	bl	times
+	str	x0, [sp, 88]
+	ldr	x0, [sp, 32]
+	str	x0, [sp, 80]
+	ldr	x1, [sp, 80]
+	ldr	x0, [sp, 96]
+	sub	x0, x1, x0
+	str	x0, [sp, 72]
+	ldr	x1, [sp, 88]
+	ldr	x0, [sp, 104]
+	sub	x0, x1, x0
+	str	x0, [sp, 64]
+	ldr	w0, [sp, 204]
+	add	w1, w0, 1
+	ldr	x0, [sp, 72]
+	scvtf	s1, x0
+	ldr	s0, [sp, 148]
+	fmul	s1, s1, s0
+	ldr	s0, [sp, 160]
+	scvtf	s0, s0
+	fdiv	s0, s1, s0
+	fcvt	d2, s0
+	ldr	x0, [sp, 64]
+	scvtf	s1, x0
+	ldr	s0, [sp, 148]
+	fmul	s1, s1, s0
+	ldr	s0, [sp, 160]
+	scvtf	s0, s0
+	fdiv	s0, s1, s0
+	fcvt	d0, s0
+	fmov	d1, d0
+	fmov	d0, d2
+	adrp	x0, .LC7
+	add	x0, x0, :lo12:.LC7
+	bl	printf
+	ldr	x0, [sp, 72]
+	cmp	x0, 0
+	bne	.L17
+	adrp	x0, .LC8
+	add	x0, x0, :lo12:.LC8
+	bl	puts
+	b	.L18
+.L17:
+	ldr	x0, [sp, 72]
+	cmp	x0, 19
+	bgt	.L18
+	ldr	x0, [sp, 72]
+	scvtf	s1, x0
+	ldr	s0, [sp, 148]
+	fmul	s0, s1, s0
+	fcvt	d2, s0
+	ldr	s0, [sp, 148]
+	fcvt	d1, s0
+	fmov	d0, 2.0e+1
+	fmul	d0, d1, d0
+	fmov	d1, d0
+	fmov	d0, d2
+	adrp	x0, .LC9
+	add	x0, x0, :lo12:.LC9
+	bl	printf
+.L18:
+	ldr	x1, [sp, 184]
+	ldr	x0, [sp, 72]
+	add	x0, x1, x0
+	str	x0, [sp, 184]
+	ldr	x0, [sp, 72]
+	mul	x0, x0, x0
+	ldr	x1, [sp, 176]
+	add	x0, x1, x0
+	str	x0, [sp, 176]
+	ldr	w0, [sp, 204]
+	add	w0, w0, 1
+	str	w0, [sp, 204]
+.L10:
+	ldr	w1, [sp, 204]
+	ldr	w0, [sp, 156]
+	cmp	w1, w0
+	blt	.L19
+	add	x0, sp, 32
+	bl	times
+	ldr	x0, [sp, 32]
+	str	x0, [sp, 128]
+	ldr	x1, [sp, 128]
+	ldr	x0, [sp, 136]
+	sub	x0, x1, x0
+	str	x0, [sp, 168]
+	ldr	x0, [sp, 184]
+	scvtf	s1, x0
+	ldr	s0, [sp, 156]
+	scvtf	s0, s0
+	fdiv	s0, s1, s0
+	str	s0, [sp, 124]
+	ldr	x0, [sp, 176]
+	scvtf	s1, x0
+	ldr	s0, [sp, 156]
+	scvtf	s0, s0
+	fdiv	s1, s1, s0
+	ldr	s0, [sp, 124]
+	fmul	s0, s0, s0
+	fsub	s0, s1, s0
+	str	s0, [sp, 120]
+	ldr	s0, [sp, 124]
+	fmul	s0, s0, s0
+	ldr	s1, [sp, 120]
+	fdiv	s0, s1, s0
+	str	s0, [sp, 116]
+	ldr	s0, [sp, 116]
+	fcvt	d0, s0
+	adrp	x0, .LC15
+	ldr	d1, [x0, #:lo12:.LC15]
+	fcmpe	d0, d1
+	bgt	.L22
+	b	.L20
+.L22:
+	adrp	x0, .LC10
+	add	x0, x0, :lo12:.LC10
+	bl	puts
+.L20:
+	ldr	s0, [sp, 160]
+	scvtf	s0, s0
+	ldr	s1, [sp, 124]
+	fdiv	s0, s1, s0
+	str	s0, [sp, 112]
+	adrp	x0, .LC11
+	add	x0, x0, :lo12:.LC11
+	bl	puts
+	ldr	s1, [sp, 112]
+	ldr	s0, [sp, 148]
+	fmul	s0, s1, s0
+	fcvt	d0, s0
+	adrp	x0, .LC12
+	add	x0, x0, :lo12:.LC12
+	bl	printf
+	ldr	s1, [sp, 124]
+	ldr	s0, [sp, 148]
+	fmul	s0, s1, s0
+	fcvt	d0, s0
+	adrp	x0, .LC13
+	add	x0, x0, :lo12:.LC13
+	bl	printf
+	ldr	x0, [sp, 168]
+	scvtf	s1, x0
+	ldr	s0, [sp, 148]
+	fmul	s0, s1, s0
+	fcvt	d0, s0
+	adrp	x0, .LC14
+	add	x0, x0, :lo12:.LC14
+	bl	printf
+	mov	w0, 0
+	bl	exit
+	.cfi_endproc
+.LFE6:
+	.size	main, .-main
+	.section	.rodata
+	.align	3
+.LC15:
+	.word	1202590843
+	.word	1063549665
+	.ident	"GCC: (GNU) 11.3.0"
+	.section	.note.GNU-stack,"",@progbits

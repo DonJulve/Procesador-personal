@@ -1,0 +1,447 @@
+	.file	"gauss.c"
+	.text
+	.globl	A
+	.bss
+	.align 32
+	.type	A, @object
+	.size	A, 134742528
+A:
+	.zero	134742528
+	.globl	P
+	.align 32
+	.type	P, @object
+	.size	P, 32832
+P:
+	.zero	32832
+	.globl	B
+	.align 32
+	.type	B, @object
+	.size	B, 32832
+B:
+	.zero	32832
+	.section	.rodata
+	.align 8
+.LC0:
+	.string	"Uso:%s <tama\361o-matriz> <numero-de-iteraciones> <numero-de-pruebas>\n"
+	.align 8
+.LC1:
+	.string	"ERROR: el tama\361o de la matriz (%d) debe ser menor que MAXSIZE (%d)\n"
+	.align 8
+.LC2:
+	.string	"ERROR: el n\372mero de iteraciones y el de pruebas debe ser mayor que 0\n"
+.LC5:
+	.string	"\n******** Datos ********"
+	.align 8
+.LC6:
+	.string	"Resolucion del temporizador: %7.1f usg (%d intervalos/seg)\n"
+	.align 8
+.LC7:
+	.string	"Tama\361o_matriz, limit, repeat:  %dx%d, %d, %d\n"
+.LC8:
+	.string	"Ejecutando gauss v1.3.\n"
+	.align 8
+.LC10:
+	.string	"*** Test %02d = %8.3f usg (%8.3f)\n"
+	.align 8
+.LC11:
+	.string	"AVISO: tiempo de ejecuci\363n menor que la resoluci\363n del reloj"
+	.align 8
+.LC13:
+	.string	"AVISO: tiempo de ejecuci\363n (%4.2f usg) menor que 20 ticks del reloj (%4.2f usg)\n"
+	.align 8
+.LC15:
+	.string	"AVISO: Varianza de las mediciones demasiado alta"
+.LC16:
+	.string	"\n******** Resultados ********"
+	.align 8
+.LC17:
+	.string	"Tiempo medio de ejecuci\363n de L/U    = %8.3f usg\n"
+	.align 8
+.LC18:
+	.string	"Tiempo medio de ejecuci\363n de limit  = %8.0f usg\n"
+	.align 8
+.LC19:
+	.string	"Tiempo total de ejecuci\363n de repeat = %8.0f usg\n\n"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB6:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$192, %rsp
+	movl	%edi, -180(%rbp)
+	movq	%rsi, -192(%rbp)
+	movq	$0, -24(%rbp)
+	movq	$0, -32(%rbp)
+	movq	$0, -40(%rbp)
+	cmpl	$3, -180(%rbp)
+	jg	.L2
+	movq	-192(%rbp), %rax
+	movq	(%rax), %rax
+	movq	%rax, %rsi
+	movl	$.LC0, %edi
+	movl	$0, %eax
+	call	printf
+	movl	$-1, %edi
+	call	exit
+.L2:
+	movq	-192(%rbp), %rax
+	addq	$8, %rax
+	movq	(%rax), %rax
+	movq	%rax, %rdi
+	call	atoi
+	movl	%eax, -44(%rbp)
+	cmpl	$4104, -44(%rbp)
+	jle	.L3
+	movq	stderr(%rip), %rax
+	movl	-44(%rbp), %edx
+	movl	$4104, %ecx
+	movl	$.LC1, %esi
+	movq	%rax, %rdi
+	movl	$0, %eax
+	call	fprintf
+	movl	$1, %edi
+	call	exit
+.L3:
+	movq	-192(%rbp), %rax
+	addq	$16, %rax
+	movq	(%rax), %rax
+	movq	%rax, %rdi
+	call	atoi
+	movl	%eax, -48(%rbp)
+	movq	-192(%rbp), %rax
+	addq	$24, %rax
+	movq	(%rax), %rax
+	movq	%rax, %rdi
+	call	atoi
+	movl	%eax, -52(%rbp)
+	cmpl	$0, -48(%rbp)
+	jle	.L4
+	cmpl	$0, -52(%rbp)
+	jg	.L5
+.L4:
+	movq	stderr(%rip), %rax
+	movq	%rax, %rcx
+	movl	$69, %edx
+	movl	$1, %esi
+	movl	$.LC2, %edi
+	call	fwrite
+	movl	$1, %edi
+	call	exit
+.L5:
+	movl	$0, -12(%rbp)
+	jmp	.L6
+.L9:
+	pxor	%xmm1, %xmm1
+	cvtsi2sdl	-12(%rbp), %xmm1
+	movsd	.LC3(%rip), %xmm0
+	addsd	%xmm1, %xmm0
+	movl	-12(%rbp), %eax
+	cltq
+	movsd	%xmm0, B(,%rax,8)
+	pxor	%xmm0, %xmm0
+	cvtsi2sdl	-12(%rbp), %xmm0
+	addsd	%xmm0, %xmm0
+	movl	-12(%rbp), %eax
+	cltq
+	movsd	%xmm0, P(,%rax,8)
+	movl	$0, -16(%rbp)
+	jmp	.L7
+.L8:
+	pxor	%xmm1, %xmm1
+	cvtsi2sdl	-12(%rbp), %xmm1
+	pxor	%xmm0, %xmm0
+	cvtsi2sdl	-16(%rbp), %xmm0
+	addsd	%xmm1, %xmm0
+	movl	-16(%rbp), %eax
+	movslq	%eax, %rcx
+	movl	-12(%rbp), %eax
+	movslq	%eax, %rdx
+	movq	%rdx, %rax
+	salq	$9, %rax
+	addq	%rdx, %rax
+	salq	$3, %rax
+	addq	%rcx, %rax
+	movsd	%xmm0, A(,%rax,8)
+	addl	$1, -16(%rbp)
+.L7:
+	movl	-16(%rbp), %eax
+	cmpl	-44(%rbp), %eax
+	jl	.L8
+	addl	$1, -12(%rbp)
+.L6:
+	movl	-12(%rbp), %eax
+	cmpl	-44(%rbp), %eax
+	jl	.L9
+	movl	$2, %edi
+	call	sysconf
+	movl	%eax, -56(%rbp)
+	pxor	%xmm1, %xmm1
+	cvtsi2sdl	-56(%rbp), %xmm1
+	movsd	.LC4(%rip), %xmm0
+	divsd	%xmm1, %xmm0
+	cvtsd2ss	%xmm0, %xmm0
+	movss	%xmm0, -60(%rbp)
+	movl	$.LC5, %edi
+	call	puts
+	pxor	%xmm3, %xmm3
+	cvtss2sd	-60(%rbp), %xmm3
+	movq	%xmm3, %rax
+	movl	-56(%rbp), %edx
+	movl	%edx, %esi
+	movq	%rax, %xmm0
+	movl	$.LC6, %edi
+	movl	$1, %eax
+	call	printf
+	movl	-52(%rbp), %esi
+	movl	-48(%rbp), %ecx
+	movl	-44(%rbp), %edx
+	movl	-44(%rbp), %eax
+	movl	%esi, %r8d
+	movl	%eax, %esi
+	movl	$.LC7, %edi
+	movl	$0, %eax
+	call	printf
+	movl	$.LC8, %edi
+	call	puts
+	leaq	-176(%rbp), %rax
+	movq	%rax, %rdi
+	call	times
+	movq	-176(%rbp), %rax
+	movq	%rax, -72(%rbp)
+	movl	$0, -4(%rbp)
+	jmp	.L10
+.L19:
+	leaq	-176(%rbp), %rax
+	movq	%rax, %rdi
+	call	times
+	movq	%rax, -104(%rbp)
+	movq	-176(%rbp), %rax
+	movq	%rax, -112(%rbp)
+	movl	$0, -8(%rbp)
+	jmp	.L11
+.L16:
+	pxor	%xmm0, %xmm0
+	movsd	%xmm0, A(%rip)
+	movl	$0, -12(%rbp)
+	jmp	.L12
+.L15:
+	movl	$0, -16(%rbp)
+	jmp	.L13
+.L14:
+	movl	-16(%rbp), %eax
+	movslq	%eax, %rcx
+	movl	-12(%rbp), %eax
+	movslq	%eax, %rdx
+	movq	%rdx, %rax
+	salq	$9, %rax
+	addq	%rdx, %rax
+	salq	$3, %rax
+	addq	%rcx, %rax
+	movsd	A(,%rax,8), %xmm0
+	movl	-12(%rbp), %eax
+	cltq
+	movsd	P(,%rax,8), %xmm2
+	movl	-16(%rbp), %eax
+	cltq
+	movsd	B(,%rax,8), %xmm1
+	mulsd	%xmm2, %xmm1
+	subsd	%xmm1, %xmm0
+	movl	-16(%rbp), %eax
+	movslq	%eax, %rcx
+	movl	-12(%rbp), %eax
+	movslq	%eax, %rdx
+	movq	%rdx, %rax
+	salq	$9, %rax
+	addq	%rdx, %rax
+	salq	$3, %rax
+	addq	%rcx, %rax
+	movsd	%xmm0, A(,%rax,8)
+	addl	$1, -16(%rbp)
+.L13:
+	movl	-16(%rbp), %eax
+	cmpl	-44(%rbp), %eax
+	jl	.L14
+	addl	$1, -12(%rbp)
+.L12:
+	movl	-12(%rbp), %eax
+	cmpl	-44(%rbp), %eax
+	jl	.L15
+	addl	$1, -8(%rbp)
+.L11:
+	movl	-8(%rbp), %eax
+	cmpl	-48(%rbp), %eax
+	jl	.L16
+	leaq	-176(%rbp), %rax
+	movq	%rax, %rdi
+	call	times
+	movq	%rax, -120(%rbp)
+	movq	-176(%rbp), %rax
+	movq	%rax, -128(%rbp)
+	movq	-128(%rbp), %rax
+	subq	-112(%rbp), %rax
+	movq	%rax, -136(%rbp)
+	movq	-120(%rbp), %rax
+	subq	-104(%rbp), %rax
+	movq	%rax, -144(%rbp)
+	pxor	%xmm0, %xmm0
+	cvtsi2ssq	-144(%rbp), %xmm0
+	mulss	-60(%rbp), %xmm0
+	pxor	%xmm1, %xmm1
+	cvtsi2ssl	-48(%rbp), %xmm1
+	divss	%xmm1, %xmm0
+	pxor	%xmm2, %xmm2
+	cvtss2sd	%xmm0, %xmm2
+	pxor	%xmm0, %xmm0
+	cvtsi2ssq	-136(%rbp), %xmm0
+	mulss	-60(%rbp), %xmm0
+	pxor	%xmm1, %xmm1
+	cvtsi2ssl	-48(%rbp), %xmm1
+	divss	%xmm1, %xmm0
+	pxor	%xmm4, %xmm4
+	cvtss2sd	%xmm0, %xmm4
+	movq	%xmm4, %rax
+	movl	-4(%rbp), %edx
+	addl	$1, %edx
+	movapd	%xmm2, %xmm1
+	movq	%rax, %xmm0
+	movl	%edx, %esi
+	movl	$.LC10, %edi
+	movl	$2, %eax
+	call	printf
+	cmpq	$0, -136(%rbp)
+	jne	.L17
+	movl	$.LC11, %edi
+	call	puts
+	jmp	.L18
+.L17:
+	cmpq	$19, -136(%rbp)
+	jg	.L18
+	pxor	%xmm1, %xmm1
+	cvtss2sd	-60(%rbp), %xmm1
+	movsd	.LC12(%rip), %xmm0
+	mulsd	%xmm0, %xmm1
+	pxor	%xmm0, %xmm0
+	cvtsi2ssq	-136(%rbp), %xmm0
+	mulss	-60(%rbp), %xmm0
+	pxor	%xmm5, %xmm5
+	cvtss2sd	%xmm0, %xmm5
+	movq	%xmm5, %rax
+	movq	%rax, %xmm0
+	movl	$.LC13, %edi
+	movl	$2, %eax
+	call	printf
+.L18:
+	movq	-136(%rbp), %rax
+	addq	%rax, -24(%rbp)
+	movq	-136(%rbp), %rax
+	imulq	%rax, %rax
+	addq	%rax, -32(%rbp)
+	addl	$1, -4(%rbp)
+.L10:
+	movl	-4(%rbp), %eax
+	cmpl	-52(%rbp), %eax
+	jl	.L19
+	leaq	-176(%rbp), %rax
+	movq	%rax, %rdi
+	call	times
+	movq	-176(%rbp), %rax
+	movq	%rax, -80(%rbp)
+	movq	-80(%rbp), %rax
+	subq	-72(%rbp), %rax
+	movq	%rax, -40(%rbp)
+	pxor	%xmm0, %xmm0
+	cvtsi2ssq	-24(%rbp), %xmm0
+	pxor	%xmm1, %xmm1
+	cvtsi2ssl	-52(%rbp), %xmm1
+	divss	%xmm1, %xmm0
+	movss	%xmm0, -84(%rbp)
+	pxor	%xmm0, %xmm0
+	cvtsi2ssq	-32(%rbp), %xmm0
+	pxor	%xmm2, %xmm2
+	cvtsi2ssl	-52(%rbp), %xmm2
+	movaps	%xmm0, %xmm1
+	divss	%xmm2, %xmm1
+	movss	-84(%rbp), %xmm0
+	movaps	%xmm0, %xmm2
+	mulss	%xmm0, %xmm2
+	subss	%xmm2, %xmm1
+	movaps	%xmm1, %xmm0
+	movss	%xmm0, -88(%rbp)
+	movss	-84(%rbp), %xmm0
+	movaps	%xmm0, %xmm1
+	mulss	%xmm0, %xmm1
+	movss	-88(%rbp), %xmm0
+	divss	%xmm1, %xmm0
+	movss	%xmm0, -92(%rbp)
+	pxor	%xmm0, %xmm0
+	cvtss2sd	-92(%rbp), %xmm0
+	comisd	.LC14(%rip), %xmm0
+	jbe	.L20
+	movl	$.LC15, %edi
+	call	puts
+.L20:
+	pxor	%xmm1, %xmm1
+	cvtsi2ssl	-48(%rbp), %xmm1
+	movss	-84(%rbp), %xmm0
+	divss	%xmm1, %xmm0
+	movss	%xmm0, -96(%rbp)
+	movl	$.LC16, %edi
+	call	puts
+	movss	-96(%rbp), %xmm0
+	mulss	-60(%rbp), %xmm0
+	pxor	%xmm6, %xmm6
+	cvtss2sd	%xmm0, %xmm6
+	movq	%xmm6, %rax
+	movq	%rax, %xmm0
+	movl	$.LC17, %edi
+	movl	$1, %eax
+	call	printf
+	movss	-84(%rbp), %xmm0
+	mulss	-60(%rbp), %xmm0
+	pxor	%xmm7, %xmm7
+	cvtss2sd	%xmm0, %xmm7
+	movq	%xmm7, %rax
+	movq	%rax, %xmm0
+	movl	$.LC18, %edi
+	movl	$1, %eax
+	call	printf
+	pxor	%xmm0, %xmm0
+	cvtsi2ssq	-40(%rbp), %xmm0
+	mulss	-60(%rbp), %xmm0
+	pxor	%xmm3, %xmm3
+	cvtss2sd	%xmm0, %xmm3
+	movq	%xmm3, %rax
+	movq	%rax, %xmm0
+	movl	$.LC19, %edi
+	movl	$1, %eax
+	call	printf
+	movl	$0, %edi
+	call	exit
+	.cfi_endproc
+.LFE6:
+	.size	main, .-main
+	.section	.rodata
+	.align 8
+.LC3:
+	.long	0
+	.long	1074790400
+	.align 8
+.LC4:
+	.long	0
+	.long	1093567616
+	.align 8
+.LC12:
+	.long	0
+	.long	1077149696
+	.align 8
+.LC14:
+	.long	1202590843
+	.long	1063549665
+	.ident	"GCC: (GNU) 12.2.1 20221121 (Red Hat 12.2.1-7)"
+	.section	.note.GNU-stack,"",@progbits

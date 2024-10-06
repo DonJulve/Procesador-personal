@@ -1,0 +1,423 @@
+	.arch armv8-a
+	.file	"gauss.c"
+	.text
+	.section	.rodata.str1.8,"aMS",@progbits,1
+	.align	3
+.LC0:
+	.string	"Uso:%s <tama\361o-matriz> <numero-de-iteraciones> <numero-de-pruebas>\n"
+	.align	3
+.LC1:
+	.string	"ERROR: el tama\361o de la matriz (%d) debe ser menor que MAXSIZE (%d)\n"
+	.align	3
+.LC2:
+	.string	"\n******** Datos ********"
+	.align	3
+.LC3:
+	.string	"Resolucion del temporizador: %7.1f usg (%d intervalos/seg)\n"
+	.align	3
+.LC4:
+	.string	"Tama\361o_matriz, limit, repeat:  %dx%d, %d, %d\n"
+	.align	3
+.LC5:
+	.string	"Ejecutando gauss v1.3.\n"
+	.align	3
+.LC6:
+	.string	"ERROR: el n\372mero de iteraciones y el de pruebas debe ser mayor que 0\n"
+	.align	3
+.LC7:
+	.string	"*** Test %02d = %8.3f usg (%8.3f)\n"
+	.align	3
+.LC8:
+	.string	"AVISO: tiempo de ejecuci\363n menor que la resoluci\363n del reloj"
+	.align	3
+.LC9:
+	.string	"AVISO: tiempo de ejecuci\363n (%4.2f usg) menor que 20 ticks del reloj (%4.2f usg)\n"
+	.align	3
+.LC10:
+	.string	"AVISO: Varianza de las mediciones demasiado alta"
+	.align	3
+.LC11:
+	.string	"\n******** Resultados ********"
+	.align	3
+.LC12:
+	.string	"Tiempo medio de ejecuci\363n de L/U    = %8.3f usg\n"
+	.align	3
+.LC13:
+	.string	"Tiempo medio de ejecuci\363n de limit  = %8.0f usg\n"
+	.align	3
+.LC14:
+	.string	"Tiempo total de ejecuci\363n de repeat = %8.0f usg\n\n"
+	.section	.text.startup,"ax",@progbits
+	.align	2
+	.p2align 4,,11
+	.global	main
+	.type	main, %function
+main:
+.LFB22:
+	.cfi_startproc
+	stp	x29, x30, [sp, -192]!
+	.cfi_def_cfa_offset 192
+	.cfi_offset 29, -192
+	.cfi_offset 30, -184
+	mov	x29, sp
+	stp	x19, x20, [sp, 16]
+	.cfi_offset 19, -176
+	.cfi_offset 20, -168
+	mov	x20, x1
+	cmp	w0, 3
+	bgt	.L2
+	ldr	x1, [x1]
+	adrp	x0, .LC0
+	add	x0, x0, :lo12:.LC0
+	stp	x21, x22, [sp, 32]
+	.cfi_offset 22, -152
+	.cfi_offset 21, -160
+	stp	x23, x24, [sp, 48]
+	.cfi_offset 24, -136
+	.cfi_offset 23, -144
+	stp	x25, x26, [sp, 64]
+	.cfi_offset 26, -120
+	.cfi_offset 25, -128
+	stp	x27, x28, [sp, 80]
+	.cfi_offset 28, -104
+	.cfi_offset 27, -112
+	stp	d8, d9, [sp, 96]
+	.cfi_offset 73, -88
+	.cfi_offset 72, -96
+	stp	d10, d11, [sp, 112]
+	.cfi_offset 75, -72
+	.cfi_offset 74, -80
+	bl	printf
+	mov	w0, -1
+	bl	exit
+.L2:
+	.cfi_restore 21
+	.cfi_restore 22
+	.cfi_restore 23
+	.cfi_restore 24
+	.cfi_restore 25
+	.cfi_restore 26
+	.cfi_restore 27
+	.cfi_restore 28
+	.cfi_restore 72
+	.cfi_restore 73
+	.cfi_restore 74
+	.cfi_restore 75
+	ldr	x0, [x20, 8]
+	mov	w2, 10
+	mov	x1, 0
+	stp	x23, x24, [sp, 48]
+	.cfi_offset 24, -136
+	.cfi_offset 23, -144
+	bl	strtol
+	mov	x24, x0
+	mov	w19, w0
+	mov	w3, 4104
+	cmp	w0, w3
+	ble	.L3
+	adrp	x0, stderr
+	mov	w2, w24
+	adrp	x1, .LC1
+	add	x1, x1, :lo12:.LC1
+	ldr	x0, [x0, #:lo12:stderr]
+	stp	x21, x22, [sp, 32]
+	.cfi_offset 22, -152
+	.cfi_offset 21, -160
+	stp	x25, x26, [sp, 64]
+	.cfi_offset 26, -120
+	.cfi_offset 25, -128
+	stp	x27, x28, [sp, 80]
+	.cfi_offset 28, -104
+	.cfi_offset 27, -112
+	stp	d8, d9, [sp, 96]
+	.cfi_offset 73, -88
+	.cfi_offset 72, -96
+	stp	d10, d11, [sp, 112]
+	.cfi_offset 75, -72
+	.cfi_offset 74, -80
+	bl	fprintf
+	mov	w0, 1
+	bl	exit
+.L3:
+	.cfi_restore 21
+	.cfi_restore 22
+	.cfi_restore 25
+	.cfi_restore 26
+	.cfi_restore 27
+	.cfi_restore 28
+	.cfi_restore 72
+	.cfi_restore 73
+	.cfi_restore 74
+	.cfi_restore 75
+	ldr	x0, [x20, 16]
+	mov	w2, 10
+	mov	x1, 0
+	stp	x25, x26, [sp, 64]
+	.cfi_offset 26, -120
+	.cfi_offset 25, -128
+	stp	x27, x28, [sp, 80]
+	.cfi_offset 28, -104
+	.cfi_offset 27, -112
+	bl	strtol
+	mov	x27, x0
+	mov	w26, w0
+	mov	w2, 10
+	ldr	x0, [x20, 24]
+	mov	x1, 0
+	bl	strtol
+	stp	x21, x22, [sp, 32]
+	.cfi_offset 22, -152
+	.cfi_offset 21, -160
+	cmp	w27, 0
+	str	w0, [sp, 148]
+	mov	x20, x0
+	stp	d8, d9, [sp, 96]
+	.cfi_offset 73, -88
+	.cfi_offset 72, -96
+	ccmp	w0, 0, 4, gt
+	stp	d10, d11, [sp, 112]
+	.cfi_offset 75, -72
+	.cfi_offset 74, -80
+	ble	.L4
+	adrp	x5, A
+	add	x22, x5, :lo12:A
+	cmp	w24, 0
+	ble	.L9
+	adrp	x7, B
+	adrp	x4, P
+	mov	x1, x22
+	add	x7, x7, :lo12:B
+	add	x4, x4, :lo12:P
+	mov	x2, 0
+	fmov	d2, 4.0e+0
+	mov	x8, 32832
+.L8:
+	scvtf	d1, w2
+	mov	x0, 0
+	fadd	d3, d1, d2
+	fadd	d0, d1, d1
+	str	d3, [x7, x2, lsl 3]
+	str	d0, [x4, x2, lsl 3]
+	.p2align 3,,7
+.L7:
+	scvtf	d0, w0
+	fadd	d0, d0, d1
+	str	d0, [x1, x0, lsl 3]
+	add	x0, x0, 1
+	cmp	w19, w0
+	bgt	.L7
+	add	x2, x2, 1
+	add	x1, x1, x8
+	cmp	w19, w2
+	bgt	.L8
+.L9:
+	mov	w0, 2
+	bl	sysconf
+	mov	x25, x0
+	mov	x2, 145685290680320
+	movk	x2, 0x412e, lsl 48
+	fmov	d8, x2
+	scvtf	d0, w25
+	adrp	x0, .LC2
+	add	x0, x0, :lo12:.LC2
+	str	xzr, [sp, 128]
+	adrp	x28, P
+	add	x28, x28, :lo12:P
+	mov	x23, 0
+	mov	w21, 0
+	fdiv	d8, d8, d0
+	fcvt	s8, d8
+	bl	puts
+	fcvt	d10, s8
+	mov	w1, w25
+	adrp	x0, .LC3
+	add	x0, x0, :lo12:.LC3
+	fmov	d0, d10
+	bl	printf
+	mov	w3, w27
+	mov	w2, w24
+	mov	w1, w24
+	mov	w4, w20
+	adrp	x0, .LC4
+	add	x0, x0, :lo12:.LC4
+	bl	printf
+	adrp	x24, .LC7
+	adrp	x0, .LC5
+	add	x0, x0, :lo12:.LC5
+	bl	puts
+	adrp	x27, B
+	add	x0, sp, 160
+	bl	times
+	scvtf	s9, w26
+	add	x24, x24, :lo12:.LC7
+	add	x27, x27, :lo12:B
+	ldr	x0, [sp, 160]
+	str	x0, [sp, 136]
+.L6:
+	add	x0, sp, 160
+	bl	times
+	movi	d3, #0
+	mov	x7, x0
+	ldr	x25, [sp, 160]
+	mov	w4, 0
+	mov	x3, 32832
+	.p2align 3,,7
+.L14:
+	str	d3, [x22]
+	cmp	w19, 0
+	ble	.L10
+	movi	d0, #0
+	mov	x1, x22
+	mov	x2, 0
+	.p2align 3,,7
+.L11:
+	mov	x0, 0
+	ldr	d2, [x28, x2, lsl 3]
+	b	.L13
+	.p2align 2,,3
+.L12:
+	ldr	d0, [x1, x0, lsl 3]
+.L13:
+	ldr	d1, [x27, x0, lsl 3]
+	fmsub	d0, d2, d1, d0
+	str	d0, [x1, x0, lsl 3]
+	add	x0, x0, 1
+	cmp	w19, w0
+	bgt	.L12
+	add	x2, x2, 1
+	add	x1, x1, x3
+	cmp	w19, w2
+	ble	.L10
+	ldr	d0, [x1]
+	b	.L11
+.L4:
+	adrp	x3, stderr
+	mov	x2, 69
+	mov	x1, 1
+	adrp	x0, .LC6
+	ldr	x3, [x3, #:lo12:stderr]
+	add	x0, x0, :lo12:.LC6
+	bl	fwrite
+	mov	w0, 1
+	bl	exit
+	.p2align 2,,3
+.L10:
+	add	w4, w4, 1
+	cmp	w4, w26
+	blt	.L14
+	add	x0, sp, 160
+	str	x7, [sp, 152]
+	bl	times
+	add	w21, w21, 1
+	ldp	x7, x2, [sp, 152]
+	mov	w1, w21
+	sub	x3, x0, x7
+	sub	x25, x2, x25
+	mov	x0, x24
+	scvtf	s1, x3
+	scvtf	s11, x25
+	fmul	s1, s1, s8
+	fmul	s11, s11, s8
+	fdiv	s1, s1, s9
+	fdiv	s0, s11, s9
+	fcvt	d1, s1
+	fcvt	d0, s0
+	bl	printf
+	cbz	x25, .L26
+	cmp	x25, 19
+	ble	.L27
+.L16:
+	ldr	x0, [sp, 128]
+	add	x23, x23, x25
+	madd	x0, x25, x25, x0
+	str	x0, [sp, 128]
+	ldr	w0, [sp, 148]
+	cmp	w21, w0
+	blt	.L6
+	add	x0, sp, 160
+	bl	times
+	scvtf	s1, w20
+	scvtf	s10, x23
+	ldr	x0, [sp, 128]
+	ldr	x19, [sp, 160]
+	scvtf	s0, x0
+	fdiv	s10, s10, s1
+	adrp	x0, .LC15
+	ldr	d2, [x0, #:lo12:.LC15]
+	fdiv	s0, s0, s1
+	ldr	x0, [sp, 136]
+	sub	x19, x19, x0
+	fmul	s1, s10, s10
+	fsub	s0, s0, s1
+	fdiv	s0, s0, s1
+	fcvt	d0, s0
+	fcmpe	d0, d2
+	bgt	.L19
+.L17:
+	adrp	x0, .LC11
+	add	x0, x0, :lo12:.LC11
+	bl	puts
+	fdiv	s0, s10, s9
+	adrp	x0, .LC12
+	add	x0, x0, :lo12:.LC12
+	fmul	s0, s0, s8
+	fcvt	d0, s0
+	bl	printf
+	fmul	s0, s8, s10
+	adrp	x0, .LC13
+	add	x0, x0, :lo12:.LC13
+	fcvt	d0, s0
+	bl	printf
+	scvtf	s0, x19
+	adrp	x0, .LC14
+	add	x0, x0, :lo12:.LC14
+	fmul	s0, s0, s8
+	fcvt	d0, s0
+	bl	printf
+	mov	w0, 0
+	bl	exit
+.L26:
+	adrp	x0, .LC8
+	add	x0, x0, :lo12:.LC8
+	bl	puts
+	b	.L16
+.L27:
+	fmov	d1, 2.0e+1
+	fcvt	d0, s11
+	adrp	x0, .LC9
+	add	x0, x0, :lo12:.LC9
+	fmul	d1, d10, d1
+	bl	printf
+	b	.L16
+.L19:
+	adrp	x0, .LC10
+	add	x0, x0, :lo12:.LC10
+	bl	puts
+	b	.L17
+	.cfi_endproc
+.LFE22:
+	.size	main, .-main
+	.global	B
+	.global	P
+	.global	A
+	.section	.rodata.cst8,"aM",@progbits,8
+	.align	3
+.LC15:
+	.word	1202590843
+	.word	1063549665
+	.bss
+	.align	3
+	.type	B, %object
+	.size	B, 32832
+B:
+	.zero	32832
+	.type	P, %object
+	.size	P, 32832
+P:
+	.zero	32832
+	.type	A, %object
+	.size	A, 134742528
+A:
+	.zero	134742528
+	.ident	"GCC: (GNU) 11.3.0"
+	.section	.note.GNU-stack,"",@progbits
